@@ -6,7 +6,7 @@ class BcmsLdapAuth::InstallGenerator < Cms::ModuleInstallation
   #add_migrations_directory_to_source_root __FILE__
 
   def copy_migrations
-    rake 'bcms_ldap_auth:install:migrations'
+    #rake 'bcms_ldap_auth:install:migrations'
   end
 
 
@@ -25,5 +25,20 @@ class BcmsLdapAuth::InstallGenerator < Cms::ModuleInstallation
   def add_routes
     mount_engine(BcmsLdapAuth)
   end
+
+
+  def self.next_migration_number(path)
+    unless @prev_migration_nr
+      @prev_migration_nr = Time.now.utc.strftime("%Y%m%d%H%M%S").to_i
+    else
+      @prev_migration_nr += 1
+    end
+    @prev_migration_nr.to_s
+  end
+
+  def copy_migrations
+    #migration_template "create_something.rb", "db/migrate/create_something.rb"
+  end
+
     
 end
