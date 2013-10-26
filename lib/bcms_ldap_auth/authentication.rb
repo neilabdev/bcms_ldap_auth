@@ -1,5 +1,6 @@
 module Cms
 
+
   User.class_eval do
 
     include Adauth::Rails::ModelBridge
@@ -16,6 +17,9 @@ module Cms
 
     AdauthMappings = {
         :login => :login,
+        :first_name => :first_name,
+        :last_name=> :last_name,
+        :email=>:email,
       #  :group_strings => :cn_groups
     }
 
@@ -37,6 +41,11 @@ module Cms
       end
 
       u
+    end
+
+
+    def sync_group=(group_names)
+
 
     end
 
