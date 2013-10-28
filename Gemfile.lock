@@ -135,6 +135,5 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-jdbcsqlite3-adapter
-  adauth
   bcms_ldap_auth!
   jquery-rails
