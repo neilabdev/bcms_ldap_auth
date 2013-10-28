@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.authors     = ["James Whitfield"]
   s.email       = ["jwhitfield@neilab.com"]
   s.homepage    = "http://neilab.com"
-  s.summary     = "TODO: Summary of BcmsLdapAuth."
-  s.description = "TODO: Description of BcmsLdapAuth."
+  s.summary     = "Adds ability to authenticate with LDAP"
+  s.description = "Adds ability to authenticate with LDAP"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.files -= Dir['lib/tasks/module_tasks.rake']
@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   # s.add_dependency "rails", "~> 3.2.15"
   # s.add_dependency "jquery-rails"
 
-  s.add_development_dependency "activerecord-jdbcsqlite3-adapter"
+  s.add_development_dependency "activerecord-jdbcsqlite3-adapter" if defined?(JRUBY_VERSION)
   s.add_dependency 'adauth'
 end
