@@ -8,14 +8,14 @@ module Cms
 
     def self.authenticate_with_ldap(login, password)
       u = authenticate_without_ldap(login, password)
-      return u unless u.nil?
+      return u unless u.nil? || !BcmsLdapAuth.config.enabled
 
       Cms::User.transaction do |transaction|
         ldap_user = Adauth.authenticate(login, password)
 
         if ldap_user then
           u = self.return_and_create_from_adauth(ldap_user)
-          u.sync_group = ldap_user.groups.andand.collect { |g| g.name }
+          u.sync_group = ldap_user.groups.collect { |g| g.name }
           u.password=u.password_confirmation=password # Remembers last successful password in LDAP. Should we make it unusable so that LDAP users only auth from LDAP?
                                                       #return nil unless u.save
           unless u.save
@@ -50,17 +50,20 @@ module Cms
 
         if group_names.empty? then
           # remove all ldap entries if they are empty in LDAP
-
+          remove_groups = self.groups.where(:code=>"ldap")
+          remove_groups.each do |remove_group|
+            self.groups.delete(remove_group)
+          end
         end
 
-        user_groups.andand.each do |name|
+        user_groups.each do |name|
           unless group_names.include? name then
             # remove associateion that has been deleted in ldap
             # TODO: Test this condition
             remove_group = Cms::Group.where({:name => name, :code => "ldap"}).first
             self.groups.delete(remove_group) unless remove_group.nil?
           end
-        end #user_groups
+        end unless user_groups.blank?
       end
 
     end

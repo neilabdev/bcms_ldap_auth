@@ -1,6 +1,6 @@
-# NOTE: bcms_ldap_auth uses Adauth to configure ActiveDirectory/LDAP authentication.
+# NOTE: bcms_ldap_auth internaly uses Adauth to configure ActiveDirectory/LDAP authentication.
 
-Adauth.configure do |c|
+BcmsLdapAuth.configure do |c|
 	# The Domain name of your Domain
 	#
 	# This is usually my_company.com or my_company.local
@@ -52,5 +52,9 @@ Adauth.configure do |c|
 	#
 	# Takes an array for group names
 	#c.denied_groups = ["Group1", "Group2"]
+
+
+  # To disabled LDAP auth so that auth only uses local database.
+  #c.enabled = false
 
 end
