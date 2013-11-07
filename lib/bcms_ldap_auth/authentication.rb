@@ -8,7 +8,8 @@ module Cms
 
     def self.authenticate_with_ldap(login, password)
       u = authenticate_without_ldap(login, password)
-      return u unless u.nil? || !BcmsLdapAuth.config.enabled
+      return u unless u.nil?
+      return u unless BcmsLdapAuth.config.enabled
 
       Cms::User.transaction do |transaction|
         ldap_user = Adauth.authenticate(login, password)
