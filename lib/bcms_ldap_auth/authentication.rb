@@ -12,7 +12,7 @@ module Cms
       return u unless BcmsLdapAuth.config.enabled
 
       Cms::User.transaction do |transaction|
-        ldap_user = Adauth.authenticate(login, password)
+        ldap_user = Adauth.authenticate(login, password) rescue nil
 
         if ldap_user then
           u = self.return_and_create_from_adauth(ldap_user)
