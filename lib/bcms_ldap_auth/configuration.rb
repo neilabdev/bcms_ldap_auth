@@ -21,7 +21,7 @@ module BcmsLdapAuth
   class Config
     attr_accessor   :domain, :port, :base, :server, :encryption, :query_user, :query_password, :allow_fallback,
                     :allowed_groups, :denied_groups, :allowed_ous, :denied_ous, :contains_nested_groups,
-                    :anonymous_bind, :enabled
+                    :anonymous_bind, :ignore_login_domain,:ignore_sync_failures,:enabled
 
     def initialize
       @port = 389
@@ -32,6 +32,8 @@ module BcmsLdapAuth
       @allow_fallback = false
       @contains_nested_groups = false
       @anonymous_bind = false
+      @ignore_login_domain = false
+      @ignore_sync_failures = false
       @enabled = true
     end
 
