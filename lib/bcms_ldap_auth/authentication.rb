@@ -11,12 +11,21 @@ module Cms
       return u unless u.nil?
       return u unless BcmsLdapAuth.config.enabled
 
+      login = login.to_s.split(/[\\\/]/).last  if BcmsLdapAuth.config.ignore_login_domain
+
       Cms::User.transaction do |transaction|
         ldap_user = Adauth.authenticate(login, password) rescue nil
 
         if ldap_user then
           u = self.return_and_create_from_adauth(ldap_user)
-          u.sync_group = ldap_user.groups.collect { |g| g.name }
+
+          if BcmsLdapAuth.config.ignore_sync_failures then
+            sync_group = ldap_user.groups.collect { |g| g.name } rescue nil
+          else
+            sync_group = ldap_user.groups.collect
+          end
+
+          u.sync_group = sync_group
           u.password=u.password_confirmation=password # Remembers last successful password in LDAP. Should we make it unusable so that LDAP users only auth from LDAP?
                                                       #return nil unless u.save
           unless u.save
