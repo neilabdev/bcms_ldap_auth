@@ -26,6 +26,7 @@ module Cms
           end
 
           u.sync_group = sync_group
+          u.ensure_default_groups
           u.password=u.password_confirmation=password # Remembers last successful password in LDAP. Should we make it unusable so that LDAP users only auth from LDAP?
                                                       #return nil unless u.save
           unless u.save
@@ -38,13 +39,31 @@ module Cms
     end
 
 
+    def ensure_default_groups
+      default_groups =  BcmsLdapAuth.config.default_groups.is_a?(String) ?
+          BcmsLdapAuth.config.default_groups.split(",").collect {|c| c.strip }.select {|s| s.present?} :
+          BcmsLdapAuth.config.default_groups
+      return unless default_groups.is_a?(Array)
+
+      user_groups ||= self.groups.collect { |g| g.name }
+      default_group_type = Cms::GroupType.where("name = ?", BcmsLdapAuth.config.default_group_type).first
+      default_groups.each do |group_name|
+        next if user_groups.include?(group_name)
+
+        current_group = Cms::Group.named(group_name).first
+        current_group = Cms::Group.create!(:name => name, :code => "default", :group_type_id => default_group_type.id) if current_group.nil?
+
+        self.groups << current_group
+      end if default_group_type.present?
+
+
+    end
+
     def sync_group=(group_names)
       return unless group_names.is_a?(Array)
       self.transaction do |t|
         ldap_group_type =nil
         user_groups = nil
-
-
 
         group_names.each do |name|
           # Add or Create groups user not already associated with
