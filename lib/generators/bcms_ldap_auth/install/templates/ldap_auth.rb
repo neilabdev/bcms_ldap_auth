@@ -57,8 +57,13 @@ BcmsLdapAuth.configure do |c|
   # When a user account is created or logs in via LDAP, they should automatically be assigned the
   # following group name and type
 
+  # Causes users who are imported from LDAP to be be included in a specific group ALWAYS.
   #c.default_groups = ["Connex Authenticated User"]
   #c.default_group_type = "Registered Public User"
+
+  # Synchronizes local LDAP groups with those in LDAP
+  #c.sync_ldap_groups = false
+
 
   # To disabled LDAP auth so that auth only uses local database.
   #c.enabled = false

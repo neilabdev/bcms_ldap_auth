@@ -61,7 +61,7 @@ module Cms
     end
 
     def sync_group=(group_names)
-      return unless group_names.is_a?(Array)
+      return unless (group_names.is_a?(Array) and  BcmsLdapAuth.config.sync_ldap_groups)
       self.transaction do |t|
         ldap_group_type =nil
         user_groups = nil
