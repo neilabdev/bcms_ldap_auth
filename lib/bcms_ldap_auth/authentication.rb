@@ -8,8 +8,9 @@ module Cms
 
     def self.authenticate_with_ldap(login, password)
       u = authenticate_without_ldap(login, password)
-      return u unless u.nil?
       return u unless BcmsLdapAuth.config.enabled
+      return u if (u.present? and BcmsLdapAuth.config.cache_authentication)
+
 
       login = login.to_s.split(/[\\\/]/).last  if BcmsLdapAuth.config.ignore_login_domain
 
@@ -51,7 +52,7 @@ module Cms
         next if user_groups.include?(group_name)
 
         current_group = Cms::Group.named(group_name).first
-        current_group = Cms::Group.create!(:name => name, :code => "default", :group_type_id => default_group_type.id) if current_group.nil?
+        current_group = Cms::Group.create!(:name => group_name, :code => "default", :group_type_id => default_group_type.id) if current_group.nil?
 
         self.groups << current_group
       end if default_group_type.present?
