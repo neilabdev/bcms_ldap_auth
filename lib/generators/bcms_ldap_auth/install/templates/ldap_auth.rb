@@ -54,6 +54,12 @@ BcmsLdapAuth.configure do |c|
 	#c.denied_groups = ["Group1", "Group2"]
 
 
+  # When a user account is created or logs in via LDAP, they should automatically be assigned the
+  # following group name and type
+
+  #c.default_groups = ["Connex Authenticated User"]
+  #c.default_group_type = "Registered Public User"
+
   # To disabled LDAP auth so that auth only uses local database.
   #c.enabled = false
 
