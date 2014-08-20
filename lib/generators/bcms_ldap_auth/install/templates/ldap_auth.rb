@@ -68,4 +68,10 @@ BcmsLdapAuth.configure do |c|
   # To disabled LDAP auth so that auth only uses local database.
   #c.enabled = false
 
+
+  # To enable Timeouts for LDAP connectivity
+  # c.minimum_timeout = 3  # First request timeout  in seconds.
+  # c.maximum_timeout = 2  # if first attempt times out, resubmit for N seconds. If < 1 seconds, don't resubmit.
+
+
 end
