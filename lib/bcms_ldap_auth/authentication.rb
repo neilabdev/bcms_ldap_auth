@@ -15,6 +15,19 @@ module Cms
       login = login.to_s.split(/[\\\/]/).last  if BcmsLdapAuth.config.ignore_login_domain
 
       Cms::User.transaction do |transaction|
+
+        begin
+          ldap_user = Timeout::timeout( (BcmsLdapAuth.config.minimum_timeout or 2) ) {
+            Adauth.authenticate(login, password) rescue nil
+          }
+        rescue Timeout::Error => e
+          if BcmsLdapAuth.config.maximum_timeout.to_i > 0 then
+            ldap_user = Timeout::timeout(BcmsLdapAuth.config.maximum_timeout.to_i) {
+              Adauth.authenticate(login, password) rescue nil
+            } rescue nil
+          end
+        end
+
         ldap_user = Adauth.authenticate(login, password) rescue nil
 
         if ldap_user then

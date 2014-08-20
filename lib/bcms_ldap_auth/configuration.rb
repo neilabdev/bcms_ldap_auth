@@ -21,7 +21,7 @@ module BcmsLdapAuth
   class Config
     attr_accessor   :domain, :port, :base, :server, :encryption, :query_user, :query_password, :allow_fallback,
                     :allowed_groups, :denied_groups, :allowed_ous, :denied_ous, :contains_nested_groups,
-                    :anonymous_bind, :ignore_login_domain,:ignore_sync_failures,
+                    :anonymous_bind, :ignore_login_domain,:ignore_sync_failures, :minimum_timeout,:maximum_timeout,
                     :default_groups,:default_group_type, :sync_ldap_groups, :cache_authentication, :enabled
 
     def initialize
@@ -39,6 +39,8 @@ module BcmsLdapAuth
       @default_group_type = "Registered Public User"
       @cache_authentication = false
       @sync_ldap_groups = false
+      @minimum_timeout = 3
+      @maximum_timeout = 3
       @enabled = true
     end
 
