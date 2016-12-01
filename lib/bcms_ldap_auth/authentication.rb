@@ -142,7 +142,7 @@ module Cms
     # The Order is [adauth_field, rails_field]
 
     AdauthSearchField = [:login, :login]
-  end
+  end if false
 
   class User
     # AdauthMappings
@@ -155,18 +155,21 @@ module Cms
     #
     # This will store Adauths 'login' value in the 'name' field.
 
-    AdauthMappings = {
-        :login => :login,
-        :first_name => :first_name,
-        :last_name => :last_name,
-        :email => :email,
-        #  :group_strings => :cn_groups
-    }
+    AdauthMappings = BcmsLdapAuth.config.mappings.blank? ?
+        {
+            :login => :login,
+            :first_name => :first_name,
+            :last_name => :last_name,
+            :email => :email
+        } : BcmsLdapAuth.config.mappings
 
 
     # This will cause RailsModel.find_by_name(AdauthObject.login)
     # The Order is [adauth_field, rails_field]
 
-    AdauthSearchField = [:login, :login]
+    AdauthSearchField =
+        BcmsLdapAuth.config.search_field.blank ?
+            [:login, :login] :
+            BcmsLdapAuth.config.search_field
   end
 end
