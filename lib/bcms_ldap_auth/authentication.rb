@@ -118,32 +118,6 @@ module Cms
 
   end
 
-  class Mappings
-    # AdauthMappings
-    #
-    # A hash which controls how Adauth maps its values to rails e.g.
-    #
-    # AdauthMappings = {
-    #   :name => :login
-    # }
-    #
-    # This will store Adauths 'login' value in the 'name' field.
-
-    AdauthMappings = {
-        :login => :login,
-        :first_name => :first_name,
-        :last_name => :last_name,
-        :email => :email,
-        #  :group_strings => :cn_groups
-    }
-
-
-    # This will cause RailsModel.find_by_name(AdauthObject.login)
-    # The Order is [adauth_field, rails_field]
-
-    AdauthSearchField = [:login, :login]
-  end if false
-
   class User
     # AdauthMappings
     #
@@ -155,21 +129,21 @@ module Cms
     #
     # This will store Adauths 'login' value in the 'name' field.
 
-    AdauthMappings = BcmsLdapAuth.config.mappings.blank? ?
+    AdauthMappings = BcmsLdapAuth.config.cms_user_mappings.blank? ?
         {
             :login => :login,
             :first_name => :first_name,
             :last_name => :last_name,
             :email => :email
-        } : BcmsLdapAuth.config.mappings
+        } : BcmsLdapAuth.config.cms_user_mappings
 
 
     # This will cause RailsModel.find_by_name(AdauthObject.login)
     # The Order is [adauth_field, rails_field]
 
     AdauthSearchField =
-        BcmsLdapAuth.config.search_field.blank ?
+        BcmsLdapAuth.config.cms_user_search_field.blank? ?
             [:login, :login] :
-            BcmsLdapAuth.config.search_field
+            BcmsLdapAuth.config.cms_user_search_field
   end
 end

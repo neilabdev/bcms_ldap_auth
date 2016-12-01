@@ -79,9 +79,12 @@ BcmsLdapAuth.configure do |c|
   # A hash which controls how Adauth maps its values to rails e.g.
   #
   # This will store Adauths 'login' value in the 'name' field.
-  # c.mappings = {  :login => :name,  :email => :email }
+  # c.cms_user_mappings = {  :login => :name,  :email => :email }
 
   # This will cause RailsModel.find_by_name(AdauthObject.login)
   # The Order is [adauth_field, rails_field]
-  # c.search_field = [:login, :login]
+  # c.cms_user_search_field = [:login, :login]
+
+  ### Add fields to Adauth::AdObjects::User::Fields
+  # c.adauth_user_mappings =  { :email => :other_field_that_ldap_implements }
 end
