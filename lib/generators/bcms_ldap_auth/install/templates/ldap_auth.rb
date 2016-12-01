@@ -74,4 +74,17 @@ BcmsLdapAuth.configure do |c|
   # c.maximum_timeout = 2  # if first attempt times out, resubmit for N seconds. If < 1 seconds, don't resubmit.
 
 
+  # Mappings
+  #
+  # A hash which controls how Adauth maps its values to rails e.g.
+  #
+  # This will store Adauths 'login' value in the 'name' field.
+  # c.cms_user_mappings = {  :login => :name,  :email => :email }
+
+  # This will cause RailsModel.find_by_name(AdauthObject.login)
+  # The Order is [adauth_field, rails_field]
+  # c.cms_user_search_field = [:login, :login]
+
+  ### Add fields to Adauth::AdObjects::User::Fields
+  # c.adauth_user_mappings =  { :email => :other_field_that_ldap_implements }
 end
